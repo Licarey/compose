@@ -31,10 +31,10 @@ fun Greeting(name: String) {
     Text(text = "Hello $name!")
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 100, heightDp = 150)
 @Composable
 fun DefaultPreview() {
     ComposeTheme {
-        Greeting("Android")
+        Greeting("My Android")
     }
 }
