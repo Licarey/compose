@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
             ComposeTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-                    Greeting("Android")
+                    Greeting("Android", true)
                 }
             }
         }
@@ -27,14 +27,15 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+fun Greeting(name: String, isShowName: Boolean) {
+    val showName = if (isShowName) "显示名字" else "不显示名字"
+    Text(text = "Hello $name! $showName")
 }
 
-@Preview(showBackground = true, widthDp = 100, heightDp = 150)
+@Preview(showBackground = true, widthDp = 200, heightDp = 150)
 @Composable
 fun DefaultPreview() {
     ComposeTheme {
-        Greeting("My Android")
+        Greeting("compose开发者", true)
     }
 }
