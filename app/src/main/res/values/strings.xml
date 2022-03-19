@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">compose</string>
+    <string name="compose_coder">compose开发者</string>
 </resources>
