@@ -2,25 +2,34 @@ package com.carey.compose
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -178,24 +187,90 @@ fun Greeting() {
 //        }
 //    )
 
-    val annotatedText = buildAnnotatedString {
-        append("点击")
-        pushStringAnnotation(tag = "URL", annotation = "http://www.baidu.com")
-        withStyle(style = SpanStyle(color = Color.Blue)) {
-            append("Url")
-        }
-        pop() // 结束符
-    }
+//    val annotatedText = buildAnnotatedString {
+//        append("点击")
+//        pushStringAnnotation(tag = "URL", annotation = "http://www.baidu.com")
+//        withStyle(style = SpanStyle(color = Color.Blue)) {
+//            append("Url")
+//        }
+//        pop() // 结束符
+//    }
+//
+//    ClickableText(
+//        text = annotatedText,
+//        style = TextStyle(fontSize = 30.sp),
+//        onClick = { offest ->
+//        annotatedText.getStringAnnotations(tag = "URL", start = offest, end = offest
+//        ).firstOrNull()?.let { annotation ->
+//            Log.v("LM", "click url " + annotation.item)
+//        }
+//    })
 
-    ClickableText(
-        text = annotatedText,
-        style = TextStyle(fontSize = 30.sp),
-        onClick = { offest ->
-        annotatedText.getStringAnnotations(tag = "URL", start = offest, end = offest
-        ).firstOrNull()?.let { annotation ->
-            Log.v("LM", "click url " + annotation.item)
+    // TextField用法
+//    val text = remember {
+//        mutableStateOf("你好")
+//    }
+//    TextField(
+//        value = text.value,
+//        onValueChange = {text.value = it},
+//        label = { Text("标签") }
+//    )
+
+    // OutlinedTextField用法
+
+//    Column {
+//        val text = remember {
+//            mutableStateOf("你好")
+//        }
+//        OutlinedTextField(
+//            value = text.value,
+//            onValueChange = {text.value = it},
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .background(Color.Red)
+//                .padding(15.dp),
+//            label = { Text("标签") }
+//        )
+//    }
+
+
+    // BasicTextField用法
+//    Column {
+//        val text = remember {
+//            mutableStateOf("你好")
+//        }
+//        BasicTextField(
+//            value = text.value,
+//            onValueChange = {text.value = it}
+//        )
+//    }
+
+
+    // TextField其他属性用法
+    Column {
+        val context = LocalContext.current
+        val text = remember {
+            mutableStateOf("你好")
         }
-    })
+        TextField(
+            value = text.value,
+            onValueChange = {text.value = it},
+            label = { Text("Enter text") },
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Characters, // 全部字符大写
+                keyboardType = KeyboardType.Email, // 输入email
+                autoCorrect = true, // 自动纠正
+                imeAction = ImeAction.Search // IME动作设置为搜索
+            ),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    Toast.makeText(context, "点击了Search", Toast.LENGTH_LONG).show()
+                }
+            ),
+            textStyle = TextStyle(color = Color.Blue, fontWeight = FontWeight.Bold),
+            modifier = Modifier.padding(15.dp).background(Color.Red)
+        )
+    }
 
 }
 
