@@ -5,9 +5,11 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
@@ -247,29 +249,56 @@ fun Greeting() {
 
 
     // TextField其他属性用法
+//    Column {
+//        val context = LocalContext.current
+//        val text = remember {
+//            mutableStateOf("你好")
+//        }
+//        TextField(
+//            value = text.value,
+//            onValueChange = {text.value = it},
+//            label = { Text("Enter text") },
+//            keyboardOptions = KeyboardOptions(
+//                capitalization = KeyboardCapitalization.Characters, // 全部字符大写
+//                keyboardType = KeyboardType.Email, // 输入email
+//                autoCorrect = true, // 自动纠正
+//                imeAction = ImeAction.Search // IME动作设置为搜索
+//            ),
+//            keyboardActions = KeyboardActions(
+//                onSearch = {
+//                    Toast.makeText(context, "点击了Search", Toast.LENGTH_LONG).show()
+//                }
+//            ),
+//            textStyle = TextStyle(color = Color.Blue, fontWeight = FontWeight.Bold),
+//            modifier = Modifier.padding(15.dp).background(Color.Red)
+//        )
+//    }
+
+    // 按钮的用法
     Column {
         val context = LocalContext.current
-        val text = remember {
-            mutableStateOf("你好")
-        }
-        TextField(
-            value = text.value,
-            onValueChange = {text.value = it},
-            label = { Text("Enter text") },
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Characters, // 全部字符大写
-                keyboardType = KeyboardType.Email, // 输入email
-                autoCorrect = true, // 自动纠正
-                imeAction = ImeAction.Search // IME动作设置为搜索
+        Button(
+            modifier = Modifier
+                .height(100.dp)
+                .width(250.dp), // 大小
+            onClick = {
+                // 点击事件
+                Toast.makeText(context, "点击按钮", Toast.LENGTH_LONG).show()
+            },
+            elevation = ButtonDefaults.elevation(3.dp, 10.dp, 0.dp),
+            border = BorderStroke(6.dp, Color.Yellow),
+            shape = RoundedCornerShape(20.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.Red,
+                contentColor = Color.Green,
+                disabledBackgroundColor = Color.Yellow,
+                disabledContentColor = Color.Magenta
             ),
-            keyboardActions = KeyboardActions(
-                onSearch = {
-                    Toast.makeText(context, "点击了Search", Toast.LENGTH_LONG).show()
-                }
-            ),
-            textStyle = TextStyle(color = Color.Blue, fontWeight = FontWeight.Bold),
-            modifier = Modifier.padding(15.dp).background(Color.Red)
-        )
+            contentPadding = PaddingValues(8.dp)
+
+            ) {
+                Text(text = "按钮") // 按钮文案，对应content
+              }
     }
 
 }
