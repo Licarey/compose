@@ -1,11 +1,13 @@
 package com.carey.compose
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -20,9 +22,13 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.Font
@@ -39,6 +45,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.carey.compose.ui.theme.*
+import com.google.accompanist.coil.rememberCoilPainter
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -274,31 +281,82 @@ fun Greeting() {
 //        )
 //    }
 
-    // 按钮的用法
-    Column {
-        val context = LocalContext.current
-        Button(
-            modifier = Modifier
-                .height(100.dp)
-                .width(250.dp), // 大小
-            onClick = {
-                // 点击事件
-                Toast.makeText(context, "点击按钮", Toast.LENGTH_LONG).show()
-            },
-            elevation = ButtonDefaults.elevation(3.dp, 10.dp, 0.dp),
-            border = BorderStroke(6.dp, Color.Yellow),
-            shape = RoundedCornerShape(20.dp),
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color.Red,
-                contentColor = Color.Green,
-                disabledBackgroundColor = Color.Yellow,
-                disabledContentColor = Color.Magenta
-            ),
-            contentPadding = PaddingValues(8.dp)
+//    // 按钮的用法
+//    Column {
+//        val context = LocalContext.current
+//        Button(
+//            modifier = Modifier
+//                .height(100.dp)
+//                .width(250.dp), // 大小
+//            onClick = {
+//                // 点击事件
+//                Toast.makeText(context, "点击按钮", Toast.LENGTH_LONG).show()
+//            },
+//            elevation = ButtonDefaults.elevation(3.dp, 10.dp, 0.dp),
+//            border = BorderStroke(6.dp, Color.Yellow),
+//            shape = RoundedCornerShape(20.dp),
+//            colors = ButtonDefaults.buttonColors(
+//                backgroundColor = Color.Red,
+//                contentColor = Color.Green,
+//                disabledBackgroundColor = Color.Yellow,
+//                disabledContentColor = Color.Magenta
+//            ),
+//            contentPadding = PaddingValues(8.dp)
+//
+//            ) {
+//                Text(text = "按钮") // 按钮文案，对应content
+//              }
+//    }
 
-            ) {
-                Text(text = "按钮") // 按钮文案，对应content
-              }
+
+    // Image用法
+//    Box {
+//        Text(text = "这是一个文字")
+//        Image(
+//            painter = painterResource(id = R.drawable.ic_launcher_background),
+//            modifier = Modifier.size(200.dp, 200.dp),
+//            contentDescription = "这是一张图片",
+//            alignment = Alignment.Center,
+//            alpha = 1.0f,
+//            colorFilter = ColorFilter.tint(Color.Red)
+//        )
+//    }
+//
+
+//    val bitmap = BitmapFactory.decodeFile("图片路径")
+//    Image(bitmap = bitmap.asImageBitmap(), contentDescription = "这是一张图片")
+
+    // 加载网络图
+//    Box {
+//        Image(
+//            painter = rememberCoilPainter(request = "https://picsum.photos/300/300"),
+//            contentDescription = null
+//        )
+//    }
+
+    // 圆形进度条
+//    Row(
+//        modifier = Modifier.fillMaxSize(),
+//        horizontalArrangement = Arrangement.Center,
+//        verticalAlignment = Alignment.CenterVertically
+//    ) {
+//        CircularProgressIndicator( // 圆形进度条
+//            modifier = Modifier.size(80.dp),
+//            color = Color.Red,
+//            strokeWidth = 10.dp
+//        )
+//    }
+
+    // 条形进度条
+    Row(
+        modifier = Modifier.fillMaxSize(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        LinearProgressIndicator(
+            color = Color.Red,
+            backgroundColor = Color.Yellow
+        )
     }
 
 }
