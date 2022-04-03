@@ -391,14 +391,115 @@ fun Greeting() {
 //        DefaultText("Text3") // 控件3
 //    }
 
+//    Column(
+//        modifier = Modifier.fillMaxSize(),
+//        verticalArrangement = Arrangement.spacedBy(20.dp), // 间隔20dp
+//        horizontalAlignment = Alignment.CenterHorizontally)
+//    {
+//        DefaultText("Text1") // 控件1
+//        DefaultText("Text2") // 控件2
+//        DefaultText("Text3") // 控件3
+//    }
+
+    // Row用法
+//    Row(
+//        modifier = Modifier.fillMaxSize(),
+//        horizontalArrangement = Arrangement.Center,
+//        verticalAlignment = Alignment.CenterVertically)
+//    {
+//        DefaultText("Text1") // 控件1
+//        DefaultText("Text2") // 控件2
+//        DefaultText("Text3") // 控件3
+//    }
+
+
+//    Box {
+//        Image(
+//            painter = painterResource(id = R.drawable.ic_launcher_background),
+//            modifier = Modifier.size(200.dp, 200.dp),
+//            contentDescription = "这是一张图片",
+//            alignment = Alignment.Center,
+//            alpha = 1.0f,
+//            colorFilter = ColorFilter.tint(Color.Red)
+//        )
+//
+//        Image(
+//            painter = painterResource(id = R.drawable.ic_launcher_background),
+//            modifier = Modifier.size(100.dp, 100.dp),
+//            contentDescription = "这是一张图片",
+//            alignment = Alignment.Center,
+//            alpha = 1.0f,
+//            colorFilter = ColorFilter.tint(Color.Green)
+//        )
+//    }
+
     Column(
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(20.dp), // 间隔20dp
-        horizontalAlignment = Alignment.CenterHorizontally)
-    {
-        DefaultText("Text1") // 控件1
-        DefaultText("Text2") // 控件2
-        DefaultText("Text3") // 控件3
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Row {
+            Box(
+                contentAlignment = Alignment.TopStart,
+                modifier = Modifier.size(100.dp).background(Color.Gray),
+            ) {
+                Text("1", fontSize = 20.sp)
+            }
+            Box(
+                contentAlignment = Alignment.TopCenter,
+                modifier = Modifier.size(100.dp).background(Color.Magenta),
+            ) {
+                Text("2", fontSize = 20.sp)
+            }
+            Box(
+                contentAlignment = Alignment.TopEnd,
+                modifier = Modifier.size(100.dp).background(Color.Cyan),
+            ) {
+                Text("3", fontSize = 20.sp)
+            }
+        }
+        Row {
+            Box(
+                contentAlignment = Alignment.CenterStart,
+                modifier = Modifier.size(100.dp).background(Color.DarkGray),
+            ) {
+                Text("4", fontSize = 20.sp)
+            }
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.size(100.dp).background(Color.Green),
+            ) {
+                Text("5", fontSize = 20.sp)
+            }
+            Box(
+                contentAlignment = Alignment.CenterEnd,
+                modifier = Modifier.size(100.dp).background(Color.Red),
+            ) {
+                Text("6", fontSize = 20.sp)
+            }
+        }
+
+        Row {
+            Box(
+                contentAlignment = Alignment.BottomStart,
+                modifier = Modifier.size(100.dp).background(Color.Magenta),
+            ) {
+                Text("7", fontSize = 20.sp)
+            }
+            Box(
+                contentAlignment = Alignment.BottomCenter,
+                modifier = Modifier.size(100.dp).background(Color.Yellow),
+            ) {
+                Text("8", fontSize = 20.sp)
+            }
+            Box(
+                contentAlignment = Alignment.BottomEnd,
+                modifier = Modifier.size(100.dp).background(Color.Magenta),
+            ) {
+                Text("9", fontSize = 20.sp)
+            }
+        }
+
     }
 
 }
