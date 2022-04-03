@@ -348,17 +348,68 @@ fun Greeting() {
 //    }
 
     // 条形进度条
-    Row(
+//    Row(
+//        modifier = Modifier.fillMaxSize(),
+//        horizontalArrangement = Arrangement.Center,
+//        verticalAlignment = Alignment.CenterVertically
+//    ) {
+//        LinearProgressIndicator(
+//            color = Color.Red,
+//            backgroundColor = Color.Yellow
+//        )
+//    }
+
+    // Column用法
+
+//    Column(
+//        modifier = Modifier.fillMaxSize(),
+//        verticalArrangement = Arrangement.SpaceEvenly,
+//        horizontalAlignment = Alignment.Start)
+//    {
+//        DefaultText("Text1") // 控件1
+//        DefaultText("Text2") // 控件2
+//        DefaultText("Text3") // 控件3
+//    }
+//
+//    Column(
+//        modifier = Modifier.fillMaxSize(),
+//        verticalArrangement = Arrangement.SpaceAround,
+//        horizontalAlignment = Alignment.CenterHorizontally)
+//    {
+//        DefaultText("Text1") // 控件1
+//        DefaultText("Text2") // 控件2
+//        DefaultText("Text3") // 控件3
+//    }
+//
+//    Column(
+//        modifier = Modifier.fillMaxSize(),
+//        verticalArrangement = Arrangement.SpaceBetween,
+//        horizontalAlignment = Alignment.End)
+//    {
+//        DefaultText("Text1") // 控件1
+//        DefaultText("Text2") // 控件2
+//        DefaultText("Text3") // 控件3
+//    }
+
+    Column(
         modifier = Modifier.fillMaxSize(),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        LinearProgressIndicator(
-            color = Color.Red,
-            backgroundColor = Color.Yellow
-        )
+        verticalArrangement = Arrangement.spacedBy(20.dp), // 间隔20dp
+        horizontalAlignment = Alignment.CenterHorizontally)
+    {
+        DefaultText("Text1") // 控件1
+        DefaultText("Text2") // 控件2
+        DefaultText("Text3") // 控件3
     }
 
+}
+
+@Composable
+fun DefaultText(text: String) {
+    Text(text = text,
+        modifier = Modifier.size(100.dp).background(Color.Red),
+        fontSize = 30.sp,
+        textAlign = TextAlign.Center
+    )
 }
 
 @Preview(showBackground = true, widthDp = 250, heightDp = 400)
