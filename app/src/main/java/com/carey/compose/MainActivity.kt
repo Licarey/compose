@@ -6,10 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -24,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
@@ -433,81 +431,121 @@ fun Greeting() {
 //        )
 //    }
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Row {
-            Box(
-                contentAlignment = Alignment.TopStart,
-                modifier = Modifier.size(100.dp).background(Color.Gray),
-            ) {
-                Text("1", fontSize = 20.sp)
-            }
-            Box(
-                contentAlignment = Alignment.TopCenter,
-                modifier = Modifier.size(100.dp).background(Color.Magenta),
-            ) {
-                Text("2", fontSize = 20.sp)
-            }
-            Box(
-                contentAlignment = Alignment.TopEnd,
-                modifier = Modifier.size(100.dp).background(Color.Cyan),
-            ) {
-                Text("3", fontSize = 20.sp)
-            }
-        }
-        Row {
-            Box(
-                contentAlignment = Alignment.CenterStart,
-                modifier = Modifier.size(100.dp).background(Color.DarkGray),
-            ) {
-                Text("4", fontSize = 20.sp)
-            }
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.size(100.dp).background(Color.Green),
-            ) {
-                Text("5", fontSize = 20.sp)
-            }
-            Box(
-                contentAlignment = Alignment.CenterEnd,
-                modifier = Modifier.size(100.dp).background(Color.Red),
-            ) {
-                Text("6", fontSize = 20.sp)
-            }
-        }
+//    Column(
+//        modifier = Modifier.fillMaxSize(),
+//        verticalArrangement = Arrangement.Center,
+//        horizontalAlignment = Alignment.CenterHorizontally,
+//    ) {
+//        Row {
+//            Box(
+//                contentAlignment = Alignment.TopStart,
+//                modifier = Modifier.size(100.dp).background(Color.Gray),
+//            ) {
+//                Text("1", fontSize = 20.sp)
+//            }
+//            Box(
+//                contentAlignment = Alignment.TopCenter,
+//                modifier = Modifier.size(100.dp).background(Color.Magenta),
+//            ) {
+//                Text("2", fontSize = 20.sp)
+//            }
+//            Box(
+//                contentAlignment = Alignment.TopEnd,
+//                modifier = Modifier.size(100.dp).background(Color.Cyan),
+//            ) {
+//                Text("3", fontSize = 20.sp)
+//            }
+//        }
+//        Row {
+//            Box(
+//                contentAlignment = Alignment.CenterStart,
+//                modifier = Modifier.size(100.dp).background(Color.DarkGray),
+//            ) {
+//                Text("4", fontSize = 20.sp)
+//            }
+//            Box(
+//                contentAlignment = Alignment.Center,
+//                modifier = Modifier.size(100.dp).background(Color.Green),
+//            ) {
+//                Text("5", fontSize = 20.sp)
+//            }
+//            Box(
+//                contentAlignment = Alignment.CenterEnd,
+//                modifier = Modifier.size(100.dp).background(Color.Red),
+//            ) {
+//                Text("6", fontSize = 20.sp)
+//            }
+//        }
+//
+//        Row {
+//            Box(
+//                contentAlignment = Alignment.BottomStart,
+//                modifier = Modifier.size(100.dp).background(Color.Magenta),
+//            ) {
+//                Text("7", fontSize = 20.sp)
+//            }
+//            Box(
+//                contentAlignment = Alignment.BottomCenter,
+//                modifier = Modifier.size(100.dp).background(Color.Yellow),
+//            ) {
+//                Text("8", fontSize = 20.sp)
+//            }
+//            Box(
+//                contentAlignment = Alignment.BottomEnd,
+//                modifier = Modifier.size(100.dp).background(Color.Magenta),
+//            ) {
+//                Text("9", fontSize = 20.sp)
+//            }
+//        }
+//
+//    }
 
-        Row {
-            Box(
-                contentAlignment = Alignment.BottomStart,
-                modifier = Modifier.size(100.dp).background(Color.Magenta),
-            ) {
-                Text("7", fontSize = 20.sp)
-            }
-            Box(
-                contentAlignment = Alignment.BottomCenter,
-                modifier = Modifier.size(100.dp).background(Color.Yellow),
-            ) {
-                Text("8", fontSize = 20.sp)
-            }
-            Box(
-                contentAlignment = Alignment.BottomEnd,
-                modifier = Modifier.size(100.dp).background(Color.Magenta),
-            ) {
-                Text("9", fontSize = 20.sp)
-            }
-        }
+    // 修饰符Modifier
+//    Text("程序员", modifier = Modifier.fillMaxSize())
+//    Text("程序员", modifier = Modifier.fillMaxWidth()) // 充满宽
+//    Text("程序员", modifier = Modifier.fillMaxHeight()) // 充满高
+//    Text("程序员", modifier = Modifier.size(100.dp)) // 宽高都是100dp
+//    Text("程序员", modifier = Modifier.size(width = 100.dp, height = 80.dp)) // 宽100dp 高80dp
 
+//    Box {
+//        Spacer(modifier = Modifier.matchParentSize().background(Color.Red))
+//        Text("程序员", fontSize = 30.sp)
+//    }
+
+//    Row(
+//        Modifier
+//            .fillMaxSize()
+//            .padding(10.dp)) {
+//        Box(modifier = Modifier.weight(2f).height(50.dp).background(Color.Blue))
+//        Box(modifier = Modifier.weight(1f).height(50.dp).background(Color.Red).clickable {
+//            Log.e("LM" , "点击了Box")
+//        })
+//        Modifier.shadow()
+//    }
+
+//    Box(contentAlignment = Alignment.Center) {
+//        Image(painter = painterResource(id = R.drawable.small),
+////            modifier = Modifier.size(150.dp).shadow(elevation = 10.dp, shape = MaterialTheme.shapes.medium),
+//            modifier = Modifier.size(150.dp).shadow(elevation = 10.dp, shape = RoundedCornerShape(18.dp)),
+//            contentDescription = ""
+//        )
+//    }
+
+    Box(contentAlignment = Alignment.Center) {
+        Image(painter = painterResource(id = R.drawable.small),
+//            modifier = Modifier.size(150.dp).shadow(elevation = 10.dp, shape = MaterialTheme.shapes.medium),
+            modifier = Modifier.size(150.dp).shadow(elevation = 0.dp, shape = RoundedCornerShape(18.dp), clip = true),
+            contentDescription = ""
+        )
     }
-
 }
 
 @Composable
 fun DefaultText(text: String) {
     Text(text = text,
-        modifier = Modifier.size(100.dp).background(Color.Red),
+        modifier = Modifier
+            .size(100.dp)
+            .background(Color.Red),
         fontSize = 30.sp,
         textAlign = TextAlign.Center
     )
