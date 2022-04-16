@@ -8,6 +8,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
@@ -16,9 +20,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -42,8 +49,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import com.carey.compose.bean.Chat
+import com.carey.compose.bean.Contact
 import com.carey.compose.ui.theme.*
 import com.google.accompanist.coil.rememberCoilPainter
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,6 +98,7 @@ fun Greeting(isShowName: Boolean) {
     Text(text = "Hello ${stringResource(id = R.string.compose_coder)}! $showName")
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Greeting() {
 //    Text(
@@ -531,14 +543,242 @@ fun Greeting() {
 //        )
 //    }
 
-    Box(contentAlignment = Alignment.Center) {
-        Image(painter = painterResource(id = R.drawable.small),
-//            modifier = Modifier.size(150.dp).shadow(elevation = 10.dp, shape = MaterialTheme.shapes.medium),
-            modifier = Modifier.size(150.dp).shadow(elevation = 0.dp, shape = RoundedCornerShape(18.dp), clip = true),
-            contentDescription = ""
-        )
+//    Box(contentAlignment = Alignment.Center) {
+//        Image(painter = painterResource(id = R.drawable.small),
+////            modifier = Modifier.size(150.dp).shadow(elevation = 10.dp, shape = MaterialTheme.shapes.medium),
+//            modifier = Modifier.size(150.dp).shadow(elevation = 0.dp, shape = RoundedCornerShape(18.dp), clip = true),
+//            contentDescription = ""
+//        )
+//    }
+
+    // Scaffold的使用
+//    Scaffold(
+//        topBar = { /*标题栏*/
+//            TopAppBar(title = { Text("标题") }, navigationIcon = {
+//                IconButton(onClick = {  /*点击事件*/ }) {
+//                    Icon(Icons.Filled.ArrowBack, "")
+//                }})
+//        },
+//        floatingActionButton = { /*悬浮按钮*/
+//            FloatingActionButton(onClick = {
+//                // Floating点击事件
+//                Log.e("LM" , "点击了FloatingButton")
+//            }) {
+//                Text("OK")
+//            }
+//        },
+//        content = { /*主内容*/
+//            Column(
+//                modifier = Modifier.fillMaxSize(),
+//                verticalArrangement = Arrangement.Center,
+//                horizontalAlignment = Alignment.CenterHorizontally,
+//            ) {
+//                Text("主屏幕", fontSize = 40.sp)
+//            }
+//        },
+//
+//        drawerContent = {
+//            Column(modifier = Modifier
+//                .fillMaxSize()
+//                .background(Color.Blue),
+//                verticalArrangement = Arrangement.Center,
+//                horizontalAlignment = Alignment.CenterHorizontally
+//            ) {
+//                Text(text = "侧边栏抽屉", fontSize = 30.sp)
+//            }
+//        }
+//    )
+
+    // 约束布局
+//    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+//        val (one, two) = createRefs()
+//        val three = createRef()
+//        DefaultText(
+//            "",
+//            modifier = Modifier.constrainAs(one) {
+//                start.linkTo(parent.start)
+//                end.linkTo(parent.end)
+//                top.linkTo(parent.top, margin = 16.dp)
+//            }
+//        )
+//
+//        DefaultText("Two", Modifier.constrainAs(two) {
+//            start.linkTo(parent.start)
+//            end.linkTo(parent.end)
+//            top.linkTo(one.bottom, margin = 16.dp)
+//        })
+//
+//
+//        DefaultText("Three", Modifier.constrainAs(three) {
+//            start.linkTo(parent.start)
+//            end.linkTo(parent.end)
+//            bottom.linkTo(parent.bottom, margin = 16.dp)
+//        })
+//    }
+
+    // LazyColumn使用
+//    val dataList = arrayListOf<Int>()
+//    for (index in 0 .. 10) {
+//        dataList.add(index)
+//    }
+//    LazyColumn {
+//        items(dataList) { data ->
+//            Text("item:$data")
+//        }
+//    }
+
+//    val dataList = arrayListOf<String>()
+//    for (index in 0 .. 10) {
+//        dataList.add("ind".repeat(index))
+//    }
+//    LazyColumn {
+//        itemsIndexed(dataList) { index, data ->
+//            Text("item:第${index}个数据为$data")
+//        }
+//    }
+
+//    val dataList = arrayListOf<String>()
+//    for (index in 0 .. 10) {
+//        dataList.add("ind".repeat(index))
+//    }
+//    LazyColumn {
+//        itemsIndexed(dataList.toArray()) { index, data ->
+//            Text("item:第${index}个数据为$data")
+//        }
+//    }
+
+    val chatList = arrayListOf<Chat>()
+    chatList.apply {
+        add(Chat("你好"))
+        add(Chat("在家干啥呢？"))
+        add(Chat("出来玩啊？"))
+        add(Chat("没啥事", false))
+        add(Chat("在家呆着呢", false))
+        add(Chat("好吧，我去找你玩！"))
+        add(Chat("好，快来！"))
     }
+
+//    LazyColumn {
+//        items(chatList) { data ->
+//            if (data.isLeft) {
+//                Column(modifier = Modifier.padding(end = 15.dp)) {
+//                    Spacer(modifier = Modifier.height(5.dp))
+//                    Text(
+//                        data.content, modifier = Modifier.fillMaxWidth().height(25.dp)
+//                            .background(Color.Yellow)
+//                    )
+//                }
+//            } else {
+//                Column(modifier = Modifier.padding(start = 15.dp)) {
+//                    Spacer(modifier = Modifier.height(5.dp))
+//                    Text(
+//                        data.content, modifier = Modifier.fillMaxWidth()
+//                            .background(Color.Green).height(25.dp)
+//                    )
+//                }
+//            }
+//        }
+//    }
+
+    // 粘性标题
+//    LazyColumn {
+//        items(chatList) { item ->
+//            Text(
+//                item.content,
+//                modifier = Modifier.padding(10.dp).background(Color.Red).height(150.dp)
+//                    .fillMaxWidth(), textAlign = TextAlign.Center,
+//                fontSize = 35.sp
+//            )
+//        }
+//
+//        stickyHeader {
+//            Text(
+//                "粘性标题啊",
+//                modifier = Modifier.padding(10.dp).background(Color.Green).height(150.dp)
+//                    .fillMaxWidth(), textAlign = TextAlign.Center,
+//                fontSize = 35.sp
+//            )
+//        }
+//
+//        items(chatList) { item ->
+//            Text(
+//                item.content,
+//                modifier = Modifier.padding(10.dp).background(Color.Red).height(150.dp)
+//                    .fillMaxWidth(), textAlign = TextAlign.Center,
+//                fontSize = 35.sp
+//            )
+//        }
+//
+//    }
+
+    // 通讯录
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+
+    val letters = arrayListOf("A", "B", "C", "D", "E")
+    val contactList = arrayListOf<Contact>()
+    val nameList = arrayListOf<String>()
+    for (index in 0..5) {
+        nameList.add("路人$index")
+    }
+    for (index in letters.iterator()) {
+        contactList.add(Contact(letters = index, nameList))
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(state = listState) {
+            contactList.forEach { (letter, nameList) ->
+                stickyHeader {
+                    Text(
+                        letter,
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .background(Color.Green)
+                            .fillMaxWidth(), textAlign = TextAlign.Center,
+                        fontSize = 35.sp
+                    )
+                }
+
+                items(nameList) { contact ->
+                    Text(
+                        contact,
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .background(Color.Red)
+                            .height(50.dp)
+                            .fillMaxWidth(), textAlign = TextAlign.Center,
+                        fontSize = 35.sp
+                    )
+                }
+            }
+        }
+
+        Button(
+            modifier = Modifier.width(200.dp).height(40.dp),
+            onClick = {
+                coroutineScope.launch {
+                    listState.animateScrollToItem(index = 0)
+                }
+            }) {
+            Text("点击回到顶部")
+        }
+    }
+
+
 }
+
+@Composable
+fun DefaultText(text: String, modifier: Modifier) {
+    Text(
+        text,
+        modifier = modifier
+            .size(100.dp)
+            .background(Color.Red),
+        fontSize = 30.sp,
+        textAlign = TextAlign.Center
+    )
+}
+
 
 @Composable
 fun DefaultText(text: String) {
