@@ -8,10 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
@@ -712,59 +709,101 @@ fun Greeting() {
 //    }
 
     // 通讯录
-    val listState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
+//    val listState = rememberLazyListState()
+//    val coroutineScope = rememberCoroutineScope()
+//
+//    val letters = arrayListOf("A", "B", "C", "D", "E")
+//    val contactList = arrayListOf<Contact>()
+//    val nameList = arrayListOf<String>()
+//    for (index in 0..5) {
+//        nameList.add("路人$index")
+//    }
+//    for (index in letters.iterator()) {
+//        contactList.add(Contact(letters = index, nameList))
+//    }
+//
+//    Box(modifier = Modifier.fillMaxSize()) {
+//        LazyColumn(state = listState) {
+//            contactList.forEach { (letter, nameList) ->
+//                stickyHeader {
+//                    Text(
+//                        letter,
+//                        modifier = Modifier
+//                            .padding(10.dp)
+//                            .background(Color.Green)
+//                            .fillMaxWidth(), textAlign = TextAlign.Center,
+//                        fontSize = 35.sp
+//                    )
+//                }
+//
+//                items(nameList) { contact ->
+//                    Text(
+//                        contact,
+//                        modifier = Modifier
+//                            .padding(10.dp)
+//                            .background(Color.Red)
+//                            .height(50.dp)
+//                            .fillMaxWidth(), textAlign = TextAlign.Center,
+//                        fontSize = 35.sp
+//                    )
+//                }
+//            }
+//        }
+//
+//        Button(
+//            modifier = Modifier.width(200.dp).height(40.dp).align(Alignment.BottomEnd),
+//            onClick = {
+//                coroutineScope.launch {
+//                    listState.animateScrollToItem(index = 0)
+//                }
+//            }) {
+//            Text("点击回到顶部")
+//        }
+//    }
 
-    val letters = arrayListOf("A", "B", "C", "D", "E")
-    val contactList = arrayListOf<Contact>()
-    val nameList = arrayListOf<String>()
-    for (index in 0..5) {
-        nameList.add("路人$index")
+    // 横向列表LazyRow
+//    val dataList = arrayListOf<Int>()
+//    for (index in 0 .. 10) {
+//        dataList.add(index)
+//    }
+//    LazyRow {
+//        items(
+//            items = dataList,
+//            key = { index ->
+//                index
+//            }
+//        ) { data ->
+//            Text(text = "$data")
+//        }
+//    }
+
+    // 网格列表
+    val photos = arrayListOf<Int>()
+    for(index in 0 .. 20) { // 添加21张图片
+        photos.add(R.drawable.ic_launcher_background)
     }
-    for (index in letters.iterator()) {
-        contactList.add(Contact(letters = index, nameList))
-    }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(state = listState) {
-            contactList.forEach { (letter, nameList) ->
-                stickyHeader {
-                    Text(
-                        letter,
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .background(Color.Green)
-                            .fillMaxWidth(), textAlign = TextAlign.Center,
-                        fontSize = 35.sp
-                    )
-                }
+//    LazyVerticalGrid(
+//        cells = GridCells.Fixed(count = 5)) {
+//        items(photos) { photo ->
+//            Image(
+//                painter = painterResource(id = photo),
+//                contentDescription = "",
+//                modifier = Modifier.padding(2.dp)
+//            )
+//        }
+//    }
 
-                items(nameList) { contact ->
-                    Text(
-                        contact,
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .background(Color.Red)
-                            .height(50.dp)
-                            .fillMaxWidth(), textAlign = TextAlign.Center,
-                        fontSize = 35.sp
-                    )
-                }
-            }
+    LazyVerticalGrid(
+        cells = GridCells.Fixed(count = 3)) {
+        items(photos.toArray()) { photo ->
+            Image(
+                painter = painterResource(id = photo as Int),
+                contentDescription = "",
+                modifier = Modifier.padding(2.dp)
+            )
         }
-
-        Button(
-            modifier = Modifier.width(200.dp).height(40.dp),
-            onClick = {
-                coroutineScope.launch {
-                    listState.animateScrollToItem(index = 0)
-                }
-            }) {
-            Text("点击回到顶部")
-        }
     }
-
-
 }
 
 @Composable
