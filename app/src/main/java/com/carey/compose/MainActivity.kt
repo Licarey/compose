@@ -19,10 +19,7 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -49,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.carey.compose.bean.Chat
 import com.carey.compose.bean.Contact
+import com.carey.compose.nav.MainTabs
 import com.carey.compose.ui.theme.*
 import com.google.accompanist.coil.rememberCoilPainter
 import kotlinx.coroutines.launch
@@ -644,16 +642,16 @@ fun Greeting() {
 //        }
 //    }
 
-    val chatList = arrayListOf<Chat>()
-    chatList.apply {
-        add(Chat("你好"))
-        add(Chat("在家干啥呢？"))
-        add(Chat("出来玩啊？"))
-        add(Chat("没啥事", false))
-        add(Chat("在家呆着呢", false))
-        add(Chat("好吧，我去找你玩！"))
-        add(Chat("好，快来！"))
-    }
+//    val chatList = arrayListOf<Chat>()
+//    chatList.apply {
+//        add(Chat("你好"))
+//        add(Chat("在家干啥呢？"))
+//        add(Chat("出来玩啊？"))
+//        add(Chat("没啥事", false))
+//        add(Chat("在家呆着呢", false))
+//        add(Chat("好吧，我去找你玩！"))
+//        add(Chat("好，快来！"))
+//    }
 
 //    LazyColumn {
 //        items(chatList) { data ->
@@ -778,10 +776,10 @@ fun Greeting() {
 //    }
 
     // 网格列表
-    val photos = arrayListOf<Int>()
-    for(index in 0 .. 20) { // 添加21张图片
-        photos.add(R.drawable.ic_launcher_background)
-    }
+//    val photos = arrayListOf<Int>()
+//    for(index in 0 .. 20) { // 添加21张图片
+//        photos.add(R.drawable.ic_launcher_background)
+//    }
 
 //    LazyVerticalGrid(
 //        cells = GridCells.Fixed(count = 5)) {
@@ -794,15 +792,87 @@ fun Greeting() {
 //        }
 //    }
 
-    LazyVerticalGrid(
-        cells = GridCells.Fixed(count = 3)) {
-        items(photos.toArray()) { photo ->
-            Image(
-                painter = painterResource(id = photo as Int),
-                contentDescription = "",
-                modifier = Modifier.padding(2.dp)
-            )
+//    LazyVerticalGrid(
+//        cells = GridCells.Fixed(count = 3)) {
+//        items(photos.toArray()) { photo ->
+//            Image(
+//                painter = painterResource(id = photo as Int),
+//                contentDescription = "",
+//                modifier = Modifier.padding(2.dp)
+//            )
+//        }
+//    }
+
+    // 底部导航栏
+    BottomNavigationTest()
+
+}
+
+@Composable
+fun BottomNavigationTest() {
+    val tabs = MainTabs.values() // tab数据
+    var position by remember { mutableStateOf(MainTabs.ONE)}
+    Scaffold(
+        backgroundColor = Color.Yellow, // 背景色
+        bottomBar = { // bottomBar
+            BottomNavigation(
+                backgroundColor = MaterialTheme.colors.primary,
+                contentColor = Color.Red
+            ) {
+                tabs.forEach { tab ->
+                    BottomNavigationItem(
+                        modifier = Modifier.background(MaterialTheme.colors.primary),
+                        icon = { Icon(painterResource(id = tab.icon), contentDescription = null) },
+                        label = { Text(tab.tabName) },
+                        selected = tab == position,
+                        onClick = {
+                            position = tab
+                        },
+                        alwaysShowLabel = false,
+                        selectedContentColor = Color.Green,
+                        unselectedContentColor = Color.Red
+                    )
+                }
+            }
         }
+    ) {
+        when(position) { // 根据state值的变化动态切换当面显示的页面
+            MainTabs.ONE -> One()
+            MainTabs.TWO -> Two()
+            MainTabs.THREE -> Three()
+            MainTabs.FOUR -> Four()
+        }
+    }
+}
+
+@Composable
+fun One() {
+    BaseDefault(content = "One")
+}
+
+@Composable
+fun Two() {
+    BaseDefault(content = "Two")
+}
+
+@Composable
+fun Three() {
+    BaseDefault(content = "Three")
+}
+
+@Composable
+fun Four() {
+    BaseDefault(content = "Four")
+}
+
+@Composable
+fun BaseDefault(content: String) {
+    Row(
+        modifier = Modifier.fillMaxSize(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(text = content, fontSize = 50.sp) // tab对应的页面要展示的内容
     }
 }
 
