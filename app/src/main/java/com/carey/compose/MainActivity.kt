@@ -23,9 +23,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -804,7 +803,10 @@ fun Greeting() {
 //    }
 
     // 底部导航栏
-    BottomNavigationTest()
+//    BottomNavigationTest()
+
+    // 自定义View
+    CustomViewTest()
 
 }
 
@@ -842,6 +844,74 @@ fun BottomNavigationTest() {
             MainTabs.THREE -> Three()
             MainTabs.FOUR -> Four()
         }
+    }
+}
+
+@Composable
+fun CustomViewTest() {
+    val points = arrayListOf(
+        Offset(100f, 100f),
+        Offset(300f, 300f),
+        Offset(500f, 500f),
+        Offset(700f, 700f),
+        Offset(900f, 900f)
+    )
+    val points2 = arrayListOf(
+        Offset(900f, 100f),
+        Offset(700f, 300f),
+        Offset(500f, 500f),
+        Offset(300f, 700f),
+        Offset(100f, 900f)
+    )
+//    Canvas(modifier = Modifier.size(360.dp)) {
+//        drawPoints(
+//            points = points,
+////            pointMode = PointMode.Points,
+////            pointMode = PointMode.Lines,
+//            pointMode = PointMode.Polygon,
+//            color = Color.Blue,
+//            strokeWidth = 30f,
+//            cap = StrokeCap.Butt
+//        )
+//        drawPoints(
+//            points = points2,
+////            pointMode = PointMode.Points,
+////            pointMode = PointMode.Lines,
+//            pointMode = PointMode.Polygon,
+//            color = Color.Blue,
+//            strokeWidth = 30f,
+//            cap = StrokeCap.Square
+//        )
+//    }
+
+//    Canvas(modifier = Modifier.fillMaxSize()) {
+//        drawPoints(
+//            points = points,
+//            pointMode = PointMode.Polygon,
+//            brush = Brush.linearGradient( // 线性渐变
+//                colors = arrayListOf(
+//                    Color.Red,
+//                    Color.Green,
+//                    Color.Blue
+//                )
+//            ),
+//            strokeWidth = 30f,
+//        )
+//    }
+
+    Canvas(modifier = Modifier.size(360.dp)) {
+        drawPoints(
+            points = points,
+            pointMode = PointMode.Polygon,
+            brush = Brush.linearGradient( // 精准渐变
+                0.0f to Color.Red,
+                0.3f to Color.Green,
+                0.6f to Color.Yellow,
+                1.0f to Color.Blue
+
+            ),
+            strokeWidth = 30f,
+        )
     }
 }
 
