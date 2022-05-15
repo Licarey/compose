@@ -23,8 +23,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -899,18 +902,80 @@ fun CustomViewTest() {
 //        )
 //    }
 
-    Canvas(modifier = Modifier.size(360.dp)) {
-        drawPoints(
-            points = points,
-            pointMode = PointMode.Polygon,
-            brush = Brush.linearGradient( // 精准渐变
-                0.0f to Color.Red,
-                0.3f to Color.Green,
-                0.6f to Color.Yellow,
-                1.0f to Color.Blue
+//    Canvas(modifier = Modifier.size(360.dp)) {
+//        drawPoints(
+//            points = points,
+//            pointMode = PointMode.Polygon,
+//            brush = Brush.linearGradient( // 精准渐变
+//                0.0f to Color.Red,
+//                0.3f to Color.Green,
+//                0.6f to Color.Yellow,
+//                1.0f to Color.Blue
+//
+//            ),
+//            strokeWidth = 30f,
+//        )
+//    }
 
-            ),
+    // 绘制线段
+//    DrawLineTest();
+
+//    // 绘制矩形
+//    DrawRectTest()
+
+    // 绘制圆角矩形
+    DrawRoundRectTest()
+}
+
+@Composable
+fun DrawLineTest() {
+    val start = Offset(100f, 100f)
+    val end = Offset(900f, 900f)
+    Canvas(modifier = Modifier.size(360.dp)) {
+        drawLine(
+            color = Color.Red,
+            start = start,
+            end = end,
             strokeWidth = 30f,
+            cap = StrokeCap.Round
+        )
+    }
+}
+
+@Composable
+fun DrawRectTest() {
+    val topLeft = Offset(100f, 100f)
+    val rectSize = Size(400f, 600f)
+    Canvas(modifier = Modifier.size(360.dp)) {
+        drawRect(
+            color = Color.Red,
+            topLeft = topLeft,
+            size = rectSize,
+            style = Stroke(
+                width = 30f,
+                miter = 4f,
+//                cap = StrokeCap.Round
+                join = StrokeJoin.Round
+            )
+        )
+    }
+}
+
+@Composable
+fun DrawRoundRectTest() {
+    val topLeft = Offset(100f, 100f)
+    val rectSize = Size(400f, 600f)
+    Canvas(modifier = Modifier.size(360.dp)) {
+        drawRoundRect(
+            color = Color.Red,
+            topLeft = topLeft,
+            size = rectSize,
+            cornerRadius = CornerRadius(50f),
+            style = Stroke(
+                width = 30f,
+                miter = 4f,
+                join = StrokeJoin.Round
+            )
         )
     }
 }
