@@ -43,6 +43,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -924,7 +926,25 @@ fun CustomViewTest() {
 //    DrawRectTest()
 
     // 绘制圆角矩形
-    DrawRoundRectTest()
+//    DrawRoundRectTest()
+
+    // 绘制圆
+//    DrawCircleTest()
+
+    // 绘制椭圆
+//    DrawOvalTest()
+
+    // 绘制圆弧
+//    DrawArcTest()
+
+    // 绘制图片
+//    DrawImageTest()
+
+    // 绘制path
+//    DrawPathTest()
+
+    // 混合模式
+    DrawBlendModeTest()
 }
 
 @Composable
@@ -979,6 +999,123 @@ fun DrawRoundRectTest() {
         )
     }
 }
+
+@Composable
+fun DrawCircleTest() {
+    Canvas(modifier = Modifier.size(360.dp)) {
+        drawCircle(
+            color = Color.Blue,
+            radius = 300f,
+            center = center,
+            style = Stroke(
+                width = 30f
+            )
+        )
+    }
+}
+
+@Composable
+fun DrawOvalTest() {
+    val topLeft = Offset(100f, 100f)
+    val ovalSize = Size(600f, 800f)
+    Canvas(modifier = Modifier.size(360.dp)) {
+        drawOval(
+            color = Color.Blue,
+            topLeft = topLeft,
+            size = ovalSize
+        )
+
+        drawRect(
+            color = Color.Red,
+            topLeft = topLeft,
+            size = ovalSize
+        )
+    }
+}
+
+@Composable
+fun DrawArcTest() {
+    Canvas(modifier = Modifier.size(360.dp)) {
+        drawArc(
+            color = Color.Blue,
+            startAngle = 90f,
+            sweepAngle = 150f,
+            useCenter = false,
+            style = Stroke(width = 10f)
+        )
+    }
+}
+
+@Composable
+fun DrawImageTest() {
+    val context = LocalContext.current
+    val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.small)
+    val image = bitmap.asImageBitmap()
+    Canvas(modifier = Modifier.size(360.dp)) {
+        drawImage(
+            image = image,
+            srcOffset = IntOffset(0, 0),
+            srcSize = IntSize(100, 100),
+            dstOffset = IntOffset(100, 100),
+            dstSize = IntSize(800, 800)
+        )
+    }
+}
+
+@Composable
+fun DrawPathTest() {
+//    val path = Path()
+//    path.moveTo(100f, 300f)
+//    path.lineTo(100f, 700f)
+//    path.lineTo(800f, 700f)
+//    path.lineTo(900f, 300f)
+//    path.lineTo(600f, 100f)
+//    path.close()
+//    Canvas(modifier = Modifier.size(360.dp)) {
+//        drawPath(
+//            path = path,
+//            color = Color.Red,
+//            style = Stroke(width = 10f)
+//        )
+//    }
+
+    // 贝塞尔曲线
+    val path = Path()
+    path.moveTo(100f, 300f)
+    path.lineTo(100f, 700f)
+    // 二阶贝塞尔曲线
+    path.quadraticBezierTo(800f, 700f, 600f, 100f)
+    // 三阶贝塞尔曲线
+    path.cubicTo(700f, 200f, 800f, 400f, 100f, 100f)
+    path.close()
+    Canvas(modifier = Modifier.size(360.dp)) {
+        drawPath(
+            path = path,
+            color = Color.Red,
+            style = Stroke(width = 10f)
+        )
+    }
+}
+
+@Composable
+fun DrawBlendModeTest() {
+    Canvas(modifier = Modifier.size(360.dp)) {
+        drawCircle(
+            color = Color.Yellow,
+            radius = 175f,
+            center = Offset(350f, 350f),
+            blendMode = BlendMode.Clear
+        )
+
+        drawRect(
+            color = Color.Blue,
+            topLeft = Offset(300f, 300f),
+            size = Size(350f, 350f),
+            blendMode = BlendMode.Clear
+        )
+    }
+}
+
 
 @Composable
 fun One() {
