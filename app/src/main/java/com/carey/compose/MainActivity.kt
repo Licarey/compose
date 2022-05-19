@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -56,6 +57,7 @@ import com.google.accompanist.coil.rememberCoilPainter
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -97,7 +99,7 @@ fun Greeting(isShowName: Boolean) {
     Text(text = "Hello ${stringResource(id = R.string.compose_coder)}! $showName")
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@ExperimentalAnimationApi
 @Composable
 fun Greeting() {
 //    Text(
@@ -811,7 +813,10 @@ fun Greeting() {
 //    BottomNavigationTest()
 
     // 自定义View
-    CustomViewTest()
+//    CustomViewTest()
+
+    // 简单动画
+    EasyAnimation()
 
 }
 
@@ -852,6 +857,7 @@ fun BottomNavigationTest() {
     }
 }
 
+@ExperimentalAnimationApi
 @Composable
 fun CustomViewTest() {
     val points = arrayListOf(
@@ -944,7 +950,8 @@ fun CustomViewTest() {
 //    DrawPathTest()
 
     // 混合模式
-    DrawBlendModeTest()
+//    DrawBlendModeTest()
+
 }
 
 @Composable
@@ -1095,6 +1102,91 @@ fun DrawPathTest() {
             style = Stroke(width = 10f)
         )
     }
+
+}
+
+@ExperimentalAnimationApi
+@Composable
+fun EasyAnimation() {
+//    val visible = remember {
+//        mutableStateOf(true)
+//    }
+//    Column(modifier = Modifier
+//        .size(360.dp)
+//        .padding(10.dp)) {
+//            Button(onClick = {visible.value = !visible.value}) {
+//            Text("可见性动画")
+//        }
+//        AnimatedVisibility(
+//            visible = visible.value,
+//            enter = slideIn({ IntOffset(400, 400)}) + expandIn(),
+//            exit = slideOut({ IntOffset(400, 400)}) + shrinkOut()
+//        ) {
+//            Text(text = "验证可见性动画", modifier = Modifier.size(150.dp))
+//
+//        }
+//
+//    }
+    // "全文"展开
+//    val expend = remember {
+//        mutableStateOf(false)
+//    }
+//
+//    Column(modifier = Modifier
+//        .size(360.dp)
+//        .padding(10.dp)) {
+//
+//        Text(
+//            text = "直接抒情能更好的更强烈的表达自己内心的情感,喜怒哀乐流露于外,给人的感觉更直观,心中有话不吐不快," +
+//                    "胸中有情不抒不快。依附性抒情就是把自己的情感依附于其他事物上进行抒情,这种抒情,比较间接,也比较委婉和含蓄。",
+//            fontSize = 16.sp,
+//            textAlign = TextAlign.Justify,
+//            overflow = TextOverflow.Ellipsis,
+//            modifier = Modifier.animateContentSize(),
+//            maxLines = if (expend.value) Int.MAX_VALUE else 2
+//        )
+//        Text(if (expend.value) "收起" else "全文", color = Color.Blue, modifier = Modifier.clickable {
+//            expend.value = !expend.value
+//        })
+//
+//    }
+    // 底bar切换动画
+    val tabs = MainTabs.values() // tab数据
+    var position by remember { mutableStateOf(MainTabs.ONE)}
+    Scaffold(
+        backgroundColor = Color.Yellow, // 背景色
+        bottomBar = { // bottomBar
+            BottomNavigation(
+                backgroundColor = MaterialTheme.colors.primary,
+                contentColor = Color.Red
+            ) {
+                tabs.forEach { tab ->
+                    BottomNavigationItem(
+                        modifier = Modifier.background(MaterialTheme.colors.primary),
+                        icon = { Icon(painterResource(id = tab.icon), contentDescription = null) },
+                        label = { Text(tab.tabName) },
+                        selected = tab == position,
+                        onClick = {
+                            position = tab
+                        },
+                        alwaysShowLabel = false,
+                        selectedContentColor = Color.Green,
+                        unselectedContentColor = Color.Red
+                    )
+                }
+            }
+        }
+    ) {
+        Crossfade(targetState = position) { screen ->
+            when(screen) { 
+                MainTabs.ONE -> One()
+                MainTabs.TWO -> Two()
+                MainTabs.THREE -> Three()
+                MainTabs.FOUR -> Four()
+            }
+        }
+
+    }
 }
 
 @Composable
@@ -1172,6 +1264,7 @@ fun DefaultText(text: String) {
     )
 }
 
+@ExperimentalAnimationApi
 @Preview(showBackground = true, widthDp = 250, heightDp = 400)
 @Composable
 fun DefaultPreview() {
