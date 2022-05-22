@@ -1,5 +1,6 @@
 package com.carey.compose
 
+import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -23,11 +25,14 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.Color.Companion.Blue
+import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -44,10 +49,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.*
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.carey.compose.bean.Chat
 import com.carey.compose.bean.Contact
@@ -816,7 +818,16 @@ fun Greeting() {
 //    CustomViewTest()
 
     // 简单动画
-    EasyAnimation()
+//    EasyAnimation()
+
+    // 其他动画
+//    OtherAnimation()
+
+    // transition
+//    TransitionTest()
+
+    // infiniteTransition
+    InfiniteTransitionTest()
 
 }
 
@@ -1190,6 +1201,157 @@ fun EasyAnimation() {
 }
 
 @Composable
+fun OtherAnimation() {
+//    var isSmall by remember { mutableStateOf(true)}
+//    val size: Dp by animateDpAsState(targetValue = if (isSmall) 40.dp else 100.dp) {
+//        Log.e("LM" , "AnimateAsState: $it")
+//    }
+//    Column(Modifier.padding(16.dp)) {
+//        Button(onClick = {
+//            isSmall = !isSmall
+//        }, modifier = Modifier.padding(vertical = 16.dp)) {
+//            Text("Change Size Dp")
+//        }
+//        Box(Modifier.size(size).background(Color.Red))
+//    }
+
+    var count by remember {
+        mutableStateOf(0)
+    }
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+        Button(onClick = { count++ }) {
+            Text("Count $count")
+        }
+        LineAnimation(count)
+    }
+}
+
+@Composable
+fun LineAnimation(lives: Int) {
+    val animVal = remember { Animatable(0f) }
+    if (lives > 5) {
+        LaunchedEffect(animVal) {
+            animVal.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(durationMillis = 1000, easing = LinearEasing)
+            )
+        }
+    }
+    Canvas(modifier = Modifier.size(200.dp, 200.dp)) {
+        drawLine(
+            color = Color.Black,
+            start = Offset(0f, 0f),
+            end = Offset(animVal.value * size.width, animVal.value * size.height),
+            strokeWidth = 2f
+        )
+    }
+}
+
+@SuppressLint("UnusedTransitionTargetStateParameter")
+@Composable
+fun TransitionTest() {
+    var boxState: BoxState by remember { mutableStateOf(BoxState.Small) }
+    val transition = updateTransition(targetState = boxState, label = "transition")
+    val color by transition.animateColor(label = "color") {
+        boxState.color
+    }
+    val size by transition.animateDp(label = "size") {
+        boxState.size
+    }
+    val offset by transition.animateDp(label = "offset") {
+        boxState.offset
+    }
+    val angle by transition.animateFloat(label = "angle") {
+        boxState.angle
+    }
+    Column(Modifier.padding(16.dp).size(360.dp)) {
+        Button(
+            onClick = { boxState = !boxState }
+        ) {
+            Text("Transition Test")
+        }
+        Box(
+            Modifier.padding(top = 20.dp)
+                .rotate(angle)
+                .size(size)
+                .offset(x = offset)
+                .background(color)
+        )
+    }
+}
+
+@Composable
+fun InfiniteTransitionTest() {
+    val infiniteTransition = rememberInfiniteTransition()
+    val color by infiniteTransition.animateColor(
+        initialValue = Color.Red,
+        targetValue = Color.Green,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
+    Box(Modifier.size(360.dp).background(color))
+
+}
+
+@Composable
+fun AnimationSpecs() {
+    val value by animateFloatAsState(
+        targetValue = 1f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioHighBouncy,
+            stiffness = Spring.StiffnessMedium
+        )
+    )
+
+    val value1 by animateFloatAsState(
+        targetValue = 1f,
+        animationSpec = tween(
+            durationMillis = 300,
+            delayMillis = 50,
+            easing = LinearOutSlowInEasing
+        )
+    )
+
+    val value2 by animateFloatAsState(
+        targetValue = 1f,
+        animationSpec = keyframes {
+            durationMillis = 375
+            0.0f at 0 with LinearOutSlowInEasing // for 0-15 ms
+            0.2f at 15 with FastOutLinearInEasing // for 15-75 ms
+            0.4f at 75 // ms
+            0.4f at 225 // ms
+        }
+    )
+
+    val value3 by animateFloatAsState(
+        targetValue = 1f,
+        animationSpec = repeatable(
+            iterations = 2,
+            animation = tween(durationMillis = 300),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
+    val value4 by animateFloatAsState(
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 300),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
+    val value5 by animateFloatAsState(
+        targetValue = 1f,
+        animationSpec = snap(delayMillis = 50)
+    )
+
+}
+
+
+@Composable
 fun DrawBlendModeTest() {
     Canvas(modifier = Modifier.size(360.dp)) {
         drawCircle(
@@ -1264,6 +1426,24 @@ fun DefaultText(text: String) {
     )
 }
 
+data class TestSize(val width: Dp, val height: Dp)
+
+@Composable
+fun TestAnimation(targetSize: TestSize) {
+    val animSize: TestSize by animateValueAsState<TestSize, AnimationVector2D>(
+        targetSize,
+        TwoWayConverter(
+            convertToVector = { size: TestSize ->
+                AnimationVector2D(size.width.value, size.height.value)
+            },
+            convertFromVector = { vector: AnimationVector2D ->
+                TestSize(vector.v1.dp, vector.v2.dp)
+            }
+        )
+    )
+}
+
+
 @ExperimentalAnimationApi
 @Preview(showBackground = true, widthDp = 250, heightDp = 400)
 @Composable
@@ -1271,4 +1451,16 @@ fun DefaultPreview() {
     ComposeTheme {
         Greeting()
     }
+}
+
+private sealed class BoxState(
+    val color: Color,
+    val size: Dp,
+    val offset: Dp,
+    val angle: Float) {
+
+    operator fun not() = if (this is Small) Large else Small
+
+    object Small : BoxState(Blue, 60.dp, 20.dp, 0f)
+    object Large : BoxState(Red, 90.dp, 50.dp, 45f)
 }
