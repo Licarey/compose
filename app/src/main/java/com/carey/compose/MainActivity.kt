@@ -10,6 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,7 +35,10 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.pointer.consumeAllChanges
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.*
@@ -57,8 +61,10 @@ import com.carey.compose.nav.MainTabs
 import com.carey.compose.ui.theme.*
 import com.google.accompanist.coil.rememberCoilPainter
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 class MainActivity : ComponentActivity() {
+    @ExperimentalMaterialApi
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,6 +107,7 @@ fun Greeting(isShowName: Boolean) {
     Text(text = "Hello ${stringResource(id = R.string.compose_coder)}! $showName")
 }
 
+@ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @Composable
 fun Greeting() {
@@ -827,7 +834,177 @@ fun Greeting() {
 //    TransitionTest()
 
     // infiniteTransition
-    InfiniteTransitionTest()
+//    InfiniteTransitionTest()
+
+    // 点击事件
+//    GesturesTest()
+
+    // 嵌套滚动
+//    ScrollTest()
+
+    // 拖动
+//    ScrollTest2()
+    // 拖动监听
+//    ScrollTest3()
+    // 滑动事件
+    SwipeableSample()
+}
+
+@Composable
+fun ScrollTest() {
+    val gradient = Brush.verticalGradient(
+        0f to Color.Gray,
+        1000f to Color.White
+    )
+    Box(
+        modifier = Modifier
+            .background(Color.LightGray)
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp)
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            repeat(8) {
+                Box(
+                    modifier = Modifier
+                        .background(brush = gradient)
+                        .height(128.dp)
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Text(
+                        "Scroll here", modifier =
+                        Modifier
+                            .padding(24.dp)
+                            .height(200.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ScrollTest2() {
+    Box(modifier = Modifier.fillMaxSize()) {
+        val offsetY = remember { mutableStateOf(0f) }
+        Text(
+            modifier = Modifier
+                .offset { IntOffset(0, offsetY.value.roundToInt()) }
+                .draggable(
+                    orientation = Orientation.Vertical,
+                    state = rememberDraggableState { delta ->
+                        offsetY.value += delta
+                    }
+                ),
+            text = "拖动",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+@Composable
+fun ScrollTest3() {
+    Box(modifier = Modifier.fillMaxSize()) {
+        val offsetX = remember { mutableStateOf(0f) }
+        val offsetY = remember { mutableStateOf(0f) }
+
+        Box(
+            Modifier
+                .offset { IntOffset(offsetX.value.roundToInt(), offsetY.value.roundToInt()) }
+                .background(Color.Blue)
+                .size(50.dp)
+                .pointerInput(Unit) {
+                    detectDragGestures { change, dragAmount ->
+                        change.consumeAllChanges()
+                        offsetX.value += dragAmount.x
+                        offsetY.value += dragAmount.y
+                    }
+                }
+        )
+    }
+}
+
+@ExperimentalMaterialApi
+@Composable
+fun SwipeableSample() {
+    val squareSize = 48.dp
+
+    val swipeableState = rememberSwipeableState(0)
+    val sizePx = with(LocalDensity.current) { squareSize.toPx() }
+    val anchors = mapOf(0f to 0, sizePx to 1) // Maps anchor points (in px) to states
+
+    Box(
+        modifier = Modifier
+            .width(96.dp)
+            .height(squareSize)
+            .swipeable(
+                state = swipeableState,
+                anchors = anchors,
+                thresholds = { from, to -> FractionalThreshold(0.3f) },
+                orientation = Orientation.Horizontal
+            )
+            .background(Color.Red)
+    ) {
+        Box(
+            Modifier
+                .offset { IntOffset(swipeableState.offset.value.roundToInt(), 0) }
+                .size(squareSize)
+                .background(Color.DarkGray)
+        )
+    }
+}
+
+
+@Composable
+fun GesturesTest() {
+//    val count = remember { mutableStateOf(0) }
+//    Text("${count.value}", modifier = Modifier.size(20.dp).background(Color.Blue).clickable {
+//        count.value += 2
+//    }, fontSize = 40.sp)
+
+    Modifier.pointerInput(Unit) {
+        detectTapGestures(
+            onPress = {/* 手势开始时调用 */ },
+            onDoubleTap = { /* 双击调用 */ },
+            onLongPress = { /* 长按调用 */ },
+            onTap = { /* 单击调用 */ }
+        )
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+                .background(Color.Blue)
+        )
+        Spacer(modifier = Modifier.height(50.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+                .background(Color.Red)
+        )
+        Spacer(modifier = Modifier.height(50.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+                .background(Color.Yellow)
+        )
+        Spacer(modifier = Modifier.height(50.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+                .background(Color.Green)
+        )
+    }
 
 }
 
@@ -1264,14 +1441,18 @@ fun TransitionTest() {
     val angle by transition.animateFloat(label = "angle") {
         boxState.angle
     }
-    Column(Modifier.padding(16.dp).size(360.dp)) {
+    Column(
+        Modifier
+            .padding(16.dp)
+            .size(360.dp)) {
         Button(
             onClick = { boxState = !boxState }
         ) {
             Text("Transition Test")
         }
         Box(
-            Modifier.padding(top = 20.dp)
+            Modifier
+                .padding(top = 20.dp)
                 .rotate(angle)
                 .size(size)
                 .offset(x = offset)
@@ -1292,7 +1473,10 @@ fun InfiniteTransitionTest() {
         )
     )
 
-    Box(Modifier.size(360.dp).background(color))
+    Box(
+        Modifier
+            .size(360.dp)
+            .background(color))
 
 }
 
@@ -1444,6 +1628,7 @@ fun TestAnimation(targetSize: TestSize) {
 }
 
 
+@ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @Preview(showBackground = true, widthDp = 250, heightDp = 400)
 @Composable
