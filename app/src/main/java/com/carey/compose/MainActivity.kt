@@ -1,6 +1,8 @@
 package com.carey.compose
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
@@ -24,6 +26,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -55,10 +58,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.core.content.edit
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.carey.compose.bean.Chat
 import com.carey.compose.bean.Contact
 import com.carey.compose.nav.MainTabs
 import com.carey.compose.ui.theme.*
+import com.carey.compose.viewmodel.CViewModel
+import com.carey.compose.viewmodel.CViewModelFactory
 import com.google.accompanist.coil.rememberCoilPainter
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -76,6 +83,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+//        startActivity(Intent(this, ViewModelActivity::class.java))
     }
 }
 
@@ -847,7 +856,10 @@ fun Greeting() {
     // 拖动监听
 //    ScrollTest3()
     // 滑动事件
-    SwipeableSample()
+//    SwipeableSample()
+
+    // viewModel
+    TestViewModel()
 }
 
 @Composable
@@ -953,6 +965,54 @@ fun SwipeableSample() {
                 .background(Color.DarkGray)
         )
     }
+}
+
+@Composable
+fun TestViewModel() {
+//    val viewModel: CViewModel = viewModel()
+//    val count by viewModel.count.observeAsState(initial = 0)
+//    Column(
+//        modifier = Modifier.fillMaxSize(),
+//        verticalArrangement = Arrangement.Center,
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        Text(count.toString(), modifier = Modifier.padding(10.dp))
+//        Button(onClick = {
+//            // 点击事件
+//            viewModel.onCountChanged(count + 2)
+//        }) {
+//            Text("Add Count")
+//        }
+//    }
+
+    val context = LocalContext.current
+    val sp = context.getSharedPreferences("count_file", Context.MODE_PRIVATE)
+    val defaultCount = sp.getInt("DEFAULT_COUNT", 0)
+    val viewModel: CViewModel = viewModel(factory = CViewModelFactory(defaultCount))
+    val count by viewModel.count.observeAsState(defaultCount)
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(count.toString(), modifier = Modifier.padding(10.dp))
+        Button(onClick = {
+            val counts = count + 2
+            viewModel.onCountChanged(counts)
+            sp.edit {
+                putInt("DEFAULT_COUNT", counts)
+            }
+        }) {
+            Text("Add Count")
+        }
+        Button(onClick = {
+            sp.edit().clear().apply()
+            viewModel.onCountChanged(0)
+        }, modifier = Modifier.padding(10.dp)) {
+            Text("Clear Count")
+        }
+    }
+
 }
 
 

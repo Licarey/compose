@@ -20,6 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ViewModelActivity"
+            android:launchMode="standard">
+        </activity>
     </application>
 
 </manifest>
